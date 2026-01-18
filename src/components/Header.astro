@@ -1,0 +1,35 @@
+---
+interface Props {
+  tagline?: string;
+}
+
+const { tagline = 'Welcome to Paulogia, where a former Christian takes a look at the claims of Christians.' } = Astro.props;
+---
+
+<header class="header">
+  <h1 class="brand-name brand-text">Paulogia</h1>
+  <p class="tagline">Where a former Christian takes a look at the claims of Christians.</p>
+</header>
+
+<style>
+  .header {
+    text-align: center;
+    padding: var(--spacing-2xl) var(--spacing-md);
+    padding-top: var(--spacing-2xl);
+  }
+
+  .brand-name {
+    font-size: clamp(3rem, 10vw, 5rem);
+    letter-spacing: 0.02em;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+  }
+
+  .tagline {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--color-text-muted);
+    max-width: 500px;
+    margin: 0 auto;
+    font-weight: 400;
+  }
+</style>

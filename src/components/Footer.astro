@@ -1,0 +1,22 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <p class="copyright">
+    &copy; {currentYear} <span class="brand-text">Paulogia</span>
+  </p>
+</footer>
+
+<style>
+  .footer {
+    padding: var(--spacing-lg) var(--spacing-md);
+    padding-bottom: calc(var(--spacing-lg) + 60px); /* Space for avatar/desk */
+    text-align: center;
+  }
+
+  .copyright {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+</style>

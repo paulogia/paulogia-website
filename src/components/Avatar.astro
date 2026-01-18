@@ -1,0 +1,81 @@
+---
+interface Props {
+  src?: string;
+  alt?: string;
+}
+
+const {
+  src = '/images/avatar.png',
+  alt = 'Paulogia avatar'
+} = Astro.props;
+---
+
+<div class="avatar-container" aria-hidden="true">
+  <div class="desk-strip"></div>
+  <img
+    src={src}
+    alt={alt}
+    class="avatar-image"
+    loading="lazy"
+    decoding="async"
+  />
+</div>
+
+<style>
+  .avatar-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .desk-strip {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(
+      to bottom,
+      var(--color-primary) 0%,
+      #022a17 100%
+    );
+    z-index: 99;
+  }
+
+  .avatar-image {
+    position: relative;
+    z-index: 101;
+    width: clamp(120px, 20vw, 200px);
+    height: auto;
+    margin-right: var(--spacing-md);
+    margin-bottom: 0;
+    transform: translateY(10px);
+  }
+
+  @media (max-width: 768px) {
+    .avatar-image {
+      width: clamp(80px, 25vw, 140px);
+      margin-right: var(--spacing-sm);
+    }
+
+    .desk-strip {
+      height: 30px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .avatar-image {
+      width: 80px;
+      margin-right: var(--spacing-xs);
+    }
+
+    .desk-strip {
+      height: 25px;
+    }
+  }
+</style>
