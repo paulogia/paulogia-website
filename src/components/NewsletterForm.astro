@@ -71,6 +71,17 @@ const {
     margin: 0 auto;
   }
 
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+  }
+
   input[type="email"] {
     flex: 1;
     padding: 0.875rem 1rem;
@@ -171,18 +182,7 @@ const {
   }
 </style>
 
-<!-- MailerLite Universal -->
-<script is:inline>
-  (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
-  .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
-  n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
-  (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-  ml('account', '2045962');
-</script>
-
 <script>
-  const MAILERLITE_GROUP_ID = '176899270126864119';
-
   const form = document.getElementById('newsletter-form') as HTMLFormElement;
   const emailInput = document.getElementById('email') as HTMLInputElement;
   const submitButton = form.querySelector('.submit-button') as HTMLButtonElement;
@@ -207,22 +207,25 @@ const {
     statusDiv.className = 'form-status';
 
     try {
-      // Submit to MailerLite via their universal script
-      const ml = (window as any).ml;
-      if (ml) {
-        ml('subscribe', {
-          email: email,
-          groups: [MAILERLITE_GROUP_ID]
-        });
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showStatus(data.message || 'Thanks for subscribing!', 'success');
+        form.reset();
+      } else {
+        showStatus(data.error || 'Something went wrong. Please try again.', 'error');
       }
-
-      // MailerLite doesn't provide a callback, so we show success after a brief delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      showStatus('Thanks for subscribing! Check your inbox to confirm.', 'success');
-      form.reset();
     } catch (error) {
-      showStatus('Something went wrong. Please try again.', 'error');
+      console.error('Subscription error:', error);
+      showStatus('Network error. Please check your connection and try again.', 'error');
     } finally {
       submitButton.classList.remove('loading');
       submitButton.disabled = false;
